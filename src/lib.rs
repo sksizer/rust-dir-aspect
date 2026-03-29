@@ -128,10 +128,7 @@ mod tests {
         fs::create_dir_all(dir.join(".obsidian")).expect("create .obsidian");
         fs::create_dir_all(dir.join(".git")).expect("create .git");
         let aspects = detect_aspects(&dir);
-        assert_eq!(
-            aspects,
-            vec![Aspect::Generic, Aspect::Obsidian, Aspect::Git,]
-        );
+        assert_eq!(aspects, vec![Aspect::Generic, Aspect::Obsidian, Aspect::Git,]);
         cleanup(&dir);
     }
 }
