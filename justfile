@@ -44,6 +44,10 @@ test:
 #                                   RELEASE                                    #
 # ---------------------------------------------------------------------------- #
 
+# Generate changelog from conventional commits
+changelog:
+    git-cliff --output CHANGELOG.md
+
 # Check for semver violations against the latest git tag
 semver-check:
     cargo semver-checks --baseline-rev "$(git describe --tags --abbrev=0)"
