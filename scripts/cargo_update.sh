@@ -1,15 +1,8 @@
 #!/usr/bin/env bash
-# 'standard' strict mode preamble
-# -e exit immediately
-# -u treat unset variables as error,
-# -o exit code is rightmost command that failed through | commands like some_cmd | grep foo - it captures a failure from some_cmd.
 set -euo pipefail
 
-# gets the dir of the path invoking the script (that could be relative like ./scripts/bring_up_to_date.sh)
-# cd into that directory, then calls pwd to get the absolute path to the directory with the script to base
-# the rest of the paths on
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROMPT_DIR="${SCRIPT_DIR}/bring_up_to_date"
+PROMPT_DIR="${SCRIPT_DIR}/cargo_update"
 
 # --- Locate a JS package runner (pnpm dlx preferred, npx fallback) ----------
 find_runner() {
@@ -44,7 +37,6 @@ else
 fi
 
 # --- Compose the prompt from markdown files ---------------------------------
-# role.md first, then remaining files in sorted order
 compose_prompt() {
     local prompt=""
 
@@ -77,8 +69,7 @@ open_url() {
 }
 
 # --- Allowed tools ----------------------------------------------------------
-# Read/Edit/Write for file changes, Bash for just commands and git, WebFetch for fetching upstream
-ALLOWED_TOOLS="Read Edit Write Bash WebFetch"
+ALLOWED_TOOLS="Read Edit Write Bash"
 
 # --- Execute or dry-run -----------------------------------------------------
 if [[ "$EXECUTE" == true ]]; then
