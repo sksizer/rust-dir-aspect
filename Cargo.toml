@@ -1,6 +1,6 @@
 [package]
 name = "dir-aspect"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Detect what kind of application folder a directory is (Git, Obsidian, etc.)"
 license = "MIT"
