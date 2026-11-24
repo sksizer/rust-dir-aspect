@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 pub enum Aspect {
     /// Directory contains `.obsidian/` folder (Obsidian vault)
     Obsidian,
-    /// Directory contains `.git/` folder (Git repository)
+    /// Directory contains `.git` (Git repository, linked worktree or submodule)
     Git,
     /// Default -- plain directory with no special markers
     Generic,
@@ -38,7 +38,9 @@ pub enum Aspect {
 /// Detect aspects of a directory by checking for marker directories.
 ///
 /// Always includes [`Aspect::Generic`]. Adds [`Aspect::Obsidian`] if `.obsidian/`
-/// is present, and [`Aspect::Git`] if `.git/` is present.
+/// is present, and [`Aspect::Git`] if `.git` is present as a directory or a
+/// file. A linked worktree or a submodule has a `.git` file that points at
+/// the real git directory.
 pub fn detect_aspects(path: &Path) -> Vec<Aspect> {
     let mut aspects = vec![Aspect::Generic];
 
@@ -46,7 +48,7 @@ pub fn detect_aspects(path: &Path) -> Vec<Aspect> {
         aspects.push(Aspect::Obsidian);
     }
 
-    if path.join(".git").is_dir() {
+    if path.join(".git").exists() {
         aspects.push(Aspect::Git);
     }
 
@@ -117,6 +119,16 @@ mod tests {
     fn git_directory_detected() {
         let dir = create_test_dir("git");
         fs::create_dir_all(dir.join(".git")).expect("create .git");
+        let aspects = detect_aspects(&dir);
+        assert_eq!(aspects, vec![Aspect::Generic, Aspect::Git]);
+        cleanup(&dir);
+    }
+
+    #[test]
+    fn git_file_detected() {
+        // A linked worktree and a submodule both carry `.git` as a file.
+        let dir = create_test_dir("git-file");
+        fs::write(dir.join(".git"), "gitdir: /elsewhere/.git/worktrees/x\n").expect("write .git");
         let aspects = detect_aspects(&dir);
         assert_eq!(aspects, vec![Aspect::Generic, Aspect::Git]);
         cleanup(&dir);
