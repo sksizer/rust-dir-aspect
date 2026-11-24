@@ -7,7 +7,6 @@ rust-version = "1.85"
 description = "Detect what kind of application folder a directory is (Git, Obsidian, etc.)"
 license = "MIT"
 repository = "https://github.com/sksizer/rust-dir-aspect"
-homepage = "https://github.com/sksizer/rust-dir-aspect"
 readme = "README.md"
 keywords = ["directory", "detection", "git", "obsidian", "desktop"]
 categories = ["filesystem"]
