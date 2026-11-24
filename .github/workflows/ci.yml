@@ -17,6 +17,8 @@ jobs:
       - uses: "extractions/setup-just@v3"
       - run: "just full-check"
       - run: "just test"
+      # Builds the crate from its `include` list, as crates.io will.
+      - run: "cargo package --locked"
       - run: | # shell
           echo "## CI result" >> $GITHUB_STEP_SUMMARY
           echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
